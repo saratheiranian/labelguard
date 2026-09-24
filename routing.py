@@ -76,6 +76,7 @@ def run(strategy, threshold=0.95, fixed_k=5, max_labels=7):
         total_labels += n
     return correct / N, total_labels / N
 
+results = []
 print(f"{'Strategy':<42}{'Accuracy':>9}{'Labels/task':>13}")
 for name, strat, kw in [
     ("Random, 5 labels (what we had)", "random", {}),
@@ -86,3 +87,6 @@ for name, strat, kw in [
 ]:
     acc, cost = run(strat, **kw)
     print(f"{name:<42}{acc:>9.3f}{cost:>13.2f}")
+    results.append({"strategy": name, "accuracy": acc, "labels_per_task": cost})
+
+pd.DataFrame(results).to_csv("routing_results.csv", index=False)
